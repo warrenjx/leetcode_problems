@@ -1,0 +1,21 @@
+class Solution(object):
+    def isSubsequence(self, s, t):
+        """
+        :type s: str
+        :type t: str
+        :rtype: bool
+        """
+        if len(s) > len(t): 
+            return False
+        
+        i = 0 # index for sequence
+        j = 0 # index for subsequence
+
+        while i < len(t) and j < len(s): 
+            if s[j] == t[i]: 
+                i += 1
+                j += 1 # only increment subsequence index if it was matched
+            else: 
+                i += 1
+        
+        return j == len(s)
