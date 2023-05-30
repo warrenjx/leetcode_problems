@@ -4,36 +4,52 @@ class Solution(object):
         :type nums: List[int]
         :rtype: List[List[int]]
         """
+        
+        # solution is a set to avoid duplicates
+        sol = set()
 
-        nums.sort()
-        sol = []
+        # split nums into 3 lists: positives, negatives, and zeroes
+        pos = []
+        neg = []
+        zero = []
 
-        # encapsulate 2-sum code basically, n^2 eww
-        for i in range(len(nums) - 2): 
-            j = i + 1
-            k = len(nums) - 1
+        for num in nums: 
+            if num > 0: 
+                pos.append(num)
+            elif num < 0: 
+                neg.append(num)
+            else: 
+                zero.append(num)
 
-            # to prevent duplicate triplits
-            if i > 0 and nums[i] == nums[i - 1]: 
-                continue
+        pos.sort()
+        neg.sort()
 
-            while j < k: 
-                if j > i + 1 and nums[j] == nums[j - 1]: 
-                    j += 1
-                    continue
-                elif k < len(nums) - 1 and nums[k] == nums[k + 1]: 
-                    k -= 1
-                    continue
+        # create separate sets for negatives and positives for O(1) lookup
+        pos_set = set(pos)
+        neg_set = set(neg)
 
-                # 2-sum process
-                total = nums[i] + nums[j] + nums[k]
-                if total == 0: 
-                    sol.append([nums[i], nums[j], nums[k]])
-                    j += 1
-                    k -= 1
-                elif total > 0: 
-                    k -= 1
-                else: 
-                    j += 1
+        # if there is more than 1 zero in list, add cases where num and negative num exist
+        if zero: 
+            for num in pos_set: 
+                if (-1 * num) in neg_set: 
+                    sol.add(((-1 * num), 0, num))
 
+        # if there are more than 3 zeroes in list, add case for [0, 0, 0]
+        if len(zero) >= 3: 
+            sol.add((0, 0, 0))
+
+        # find pairs of negative numbers that match with a positive number
+        for i in range(len(neg)): 
+            for j in range(i + 1, len(neg)): 
+                target = -1 * (neg[i] + neg[j])
+                if target in pos_set: 
+                    sol.add((neg[i], neg[j], target))
+
+        # find pairs of positive numbers that match with a negative number
+        for i in range(len(pos)): 
+            for j in range(i + 1, len(pos)): 
+                target = -1 * (pos[i] + pos[j])
+                if target in neg_set: 
+                    sol.add((target, pos[i], pos[j]))
+            
         return sol
