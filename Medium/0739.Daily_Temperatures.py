@@ -5,19 +5,20 @@ class Solution(object):
         :rtype: List[int]
         """
         
-        # standard stack stuff
-        sol = [0] * len(temperatures)
+        # monotonic stack
         stack = []
+        sol = [0] * len(temperatures)
 
-        # loop iterates through temperatures forward, but stack effectively moves backwards
-        for i, t in enumerate(temperatures): 
-            # loop only happens while top of stack is less than current temperature
-            while stack and temperatures[stack[-1]] < t: 
-                # iterate through stack backwards
+        # general strategy: 
+        #   if the current temp is higher than the top of stack
+        #   pop all the cooler days and calculate how many days until hotter day
+        for i in range(0, len(temperatures)): 
+            # pop stack when current day is hotter than top of the stack
+            while stack and temperatures[i] > temperatures[stack[-1]]: 
                 curr = stack.pop()
                 sol[curr] = i - curr
             
-            # only on the stack if its sol entry is empty
+            # append indeces not temperatures
             stack.append(i)
-
+        
         return sol
