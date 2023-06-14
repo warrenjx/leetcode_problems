@@ -10,18 +10,11 @@ class Solution(object):
         :rtype: ListNode
         """
 
-        # takes care of 0 and 1 node testcases
-        if not head:
-            return None
-        elif not head.next: 
-            return head
-        
-        # get the first 2 nodes ready for swapping
-        curr = head.next
-        prev = head
-        prev.next = None
+        # setup first node to prevent cycle
+        prev = None
+        curr = head
 
-        # iteratively swap the direction of links in list
+        # iteratively traverse list while reversing direction of links
         while curr: 
             nex = curr.next
 
