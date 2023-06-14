@@ -5,25 +5,24 @@ class Solution(object):
         :rtype: int
         """
 
-        # FLoyd's cycle detection algorithm
         fast = 0
         slow = 0
 
+        # floyd cycle detection algorithm
         while True: 
-            # if there is a cycle, the will overlap once
             fast = nums[nums[fast]]
             slow = nums[slow]
 
-            if nums[fast] == nums[slow]: 
-                # after they overlap, set one to beginning
-                slow = 0
-
-                while True: 
-                    # increment both by 1, when they meet again it will be the duplicate
-                    if nums[fast] == nums[slow]: 
-                        return nums[fast]
-                    
-                    slow = nums[slow]
-                    fast = nums[fast]
+            if fast == slow: 
+                break
         
-        # no returns needed out here because it is required to have a dup
+        # set one back to beginning and move at same pace, will collide at duplicate
+        slow = 0
+        while True: 
+            if fast == slow: 
+                break
+
+            fast = nums[fast]
+            slow = nums[slow]
+        
+        return fast
