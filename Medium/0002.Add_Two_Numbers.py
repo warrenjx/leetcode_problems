@@ -10,36 +10,40 @@ class Solution(object):
         :type l2: ListNode
         :rtype: ListNode
         """
-        
-        # find numerical value of sum
-        num = self.list_to_num(l1) + self.list_to_num(l2)
-        
-        # iteratively turn numerical value into linked list of desired format
-        sol = ListNode()
-        temp = sol
-        
-        temp.val = num % 10
-        num /= 10
-        
-        while num > 0: 
-            temp.next = ListNode()
-            temp = temp.next
-            
-            temp.val = num % 10
-            
-            num /= 10
-            
-        return sol
-    
-    # function turns linked list into decimal digit
-    def list_to_num(self, head): 
-        num = 0
-        mag = 1
+        num1 = 0
+        num2 = 0
 
-        while head: 
-            num += (head.val % 10) * mag
+        # convert list1 to integer
+        order = 1
+        while l1: 
+            num1 += l1.val * order
 
-            mag *= 10
-            head = head.next
+            l1 = l1.next
+            order *= 10
+
+        # convert list2 to integer
+        order = 1
+        while l2: 
+            num2 += l2.val * order
+
+            l2 = l2.next
+            order *= 10
         
-        return num
+        sol = num1 + num2
+        
+        # take care of edge case where nothing will be returned if sol == 0
+        if sol == 0: 
+            return ListNode(0)
+
+        ptr = ListNode()
+        # keep head pointer to return later
+        head = ptr
+        
+        # convert sol back into a list
+        while sol > 0: 
+            ptr.next = ListNode(sol % 10)
+
+            sol /= 10
+            ptr = ptr.next
+        
+        return head.next
