@@ -10,24 +10,32 @@ class Solution(object):
         :type root: TreeNode
         :rtype: List[int]
         """
-    
-        if not root: 
-            return []
-        
         sol = []
 
+        curr = root
         stack = deque()
-        stack.append(root)
+        prev = None
 
-        while stack: 
-            curr = stack.pop()
+        while True: 
+            if curr: # first traverse down the left side of the tree
+                stack.append(curr)
+                curr = curr.left
+            elif stack: 
+                # once reached leftmost node, have 2 options
+                curr = stack.pop()
 
-            sol.append(curr.val)
-            
-            if curr.left: 
-                stack.append(curr.left)
-            if curr.right: 
-                stack.append(curr.right)
+                if curr.right == None or curr.right == prev: # if no right path, visit and continue
+                    sol.append(curr.val)
+
+                    prev = curr
+                    curr = None
+                else: # else traverse down right until no more
+                    stack.append(curr)
+                    curr = curr.right
+            else: 
+                break
+        
+        return sol
 
         # kind of a band-aid patch because its basically a backwards pre-order
         return sol[::-1]
