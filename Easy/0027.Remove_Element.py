@@ -5,12 +5,20 @@ class Solution(object):
         :type val: int
         :rtype: int
         """
-        i = 0
+        n = len(nums)
 
-        # pop all occurances of val
-        while i < len(nums): 
-            if (nums[i] == val): 
-                nums.pop(i)
-                i -= 1
-            
-            i += 1
+        q = deque()
+        ct = 0
+
+        # build queue of indeces where val is
+        for i in range(n): 
+            if nums[i] == val: 
+                ct += 1
+                q.append(i)
+
+        # replace val indeces with nonval values
+        for i in range(n - 1, n - ct - 1, -1): 
+            if nums[i] != val: 
+                nums[q.popleft()] = nums[i]
+
+        return n - ct
